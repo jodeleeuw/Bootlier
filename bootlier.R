@@ -84,9 +84,9 @@ bootstrap.has.outliers <- function(data, bootstrap.sample.size=1000, mtm.trim.am
   return(has.outliers)
 }
 
-bootstrap.identify.outliers <- function(data){
+bootstrap.identify.outliers <- function(data, bootstrap.sample.size=1000, mtm.trim.amount=2, alpha=0.05, adjust=1, h.crit.search.depth=25){
   
-  if(!bootstrap.has.outliers(data)){
+  if(!bootstrap.has.outliers(data, bootstrap.sample.size, mtm.trim.amount, alpha, adjust, h.crit.search.depth)){
     return(list(
       data.truncated = data,
       data.outlier.set = NULL
@@ -108,7 +108,7 @@ bootstrap.identify.outliers <- function(data){
     any.false = FALSE
     for(i in 1:dim(removal_sets)[1]){
       truncated_data = data.sorted[ (1 + removal_sets[i,1]) : (length(data.sorted)-removal_sets[i,2]) ];
-      has.outlier <- bootstrap.has.outliers(truncated_data)
+      has.outlier <- bootstrap.has.outliers(truncated_data, bootstrap.sample.size, mtm.trim.amount, alpha, adjust, h.crit.search.depth)
       outcomes = c( outcomes, has.outlier )
       if(!has.outlier) { any.false = TRUE }
     }
